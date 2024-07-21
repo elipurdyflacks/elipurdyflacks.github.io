@@ -37,33 +37,39 @@
             object-fit: cover;
         }
 
-        .content {
-            position: relative;
+        .circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
             z-index: 1;
-            text-align: center;
-            padding: 20px;
+            cursor: pointer;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 4em;
-        }
-
-        p {
-            font-size: 1.5em;
+        .circle:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="video-background">
-        <video autoplay loop muted playsinline>
+        <video id="bg-video" autoplay loop muted playsinline>
             <source src="website background 2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
-    <div class="content">
-        <h1>Mysterious Video Background</h1>
-        <p>Welcome to the artsy and mysterious website</p>
-    </div>
+    <a href="https://distrokid.com/hyperfollow/elipurdyflacks/static-feat-watson" class="circle"></a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var video = document.getElementById('bg-video');
+            video.play().catch(function(error) {
+                console.log('Autoplay was prevented:', error);
+            });
+        });
+    </script>
 </body>
 </html>
