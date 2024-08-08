@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Background</title>
+    <title>Page 2</title>
     <style>
         body, html {
             margin: 0;
@@ -37,44 +37,26 @@
             object-fit: cover;
         }
 
-        .clickable-image {
+        .circle {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 500px;
             height: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
             cursor: pointer;
         }
 
-        .clickable-image img {
-            width: 100%;
-            height: 100%;
-            transition: opacity 0.3s;
-            opacity: 0.5; /* Make the image semi-transparent */
-        }
-
-        .clickable-image:hover img {
-            opacity: 0.7; /* Slightly reduce transparency on hover */
-        }
-
-        .small-black-triangle {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 30px solid black;
-            cursor: pointer;
-            z-index: 2;
+        .circle:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* Media query for smaller screens */
         @media (max-width: 768px) {
-            .clickable-image {
+            .circle {
                 width: 300px;
                 height: 300px;
             }
@@ -82,7 +64,7 @@
 
         /* Media query for extra-small screens */
         @media (max-width: 480px) {
-            .clickable-image {
+            .circle {
                 width: 200px;
                 height: 200px;
             }
@@ -92,14 +74,11 @@
 <body>
     <div class="video-background">
         <video id="bg-video" autoplay loop muted playsinline>
-            <source src="Crystal.mp4" type="video/mp4">
+            <source src="website background 2.mov" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
-    <a href="https://distrokid.com/hyperfollow/elipurdyflacks/crystal-2" class="clickable-image">
-        <img src="Crystal.jpeg" alt="Clickable Image">
-    </a>
-    <a href="page2.html" class="small-black-triangle"></a>
+    <a href="https://distrokid.com/hyperfollow/elipurdyflacks/static-feat-watson" class="circle"></a>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var video = document.getElementById('bg-video');
