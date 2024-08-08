@@ -54,6 +54,19 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        .small-black-triangle {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid black;
+            cursor: pointer;
+            z-index: 2;
+        }
+
         /* Media query for smaller screens */
         @media (max-width: 768px) {
             .circle {
@@ -79,6 +92,7 @@
         </video>
     </div>
     <a href="https://distrokid.com/hyperfollow/elipurdyflacks/static-feat-watson" class="circle"></a>
+    <a href="index.html" class="small-black-triangle"></a>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var video = document.getElementById('bg-video');
