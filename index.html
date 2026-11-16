@@ -23,34 +23,38 @@
       cursor: grab;
       touch-action: none;
       user-select: none; -webkit-user-select: none;
+      will-change: transform;
     }
     .drag.dragging { cursor: grabbing; }
     .logo-stack {
       position: relative;
       width: min(56vw, 630px);
+      aspect-ratio: 1770 / 1100;
       transform-style: preserve-3d;
       animation: spin 20s linear infinite;
     }
     @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-    @media (prefers-reduced-motion: reduce) {
-      .logo-stack, .logo-stack img { animation: none !important; }
-      .logo-stack img { filter: drop-shadow(0 0 10px rgba(255, 225, 150, 0.55)) drop-shadow(0 0 26px rgba(255, 210, 120, 0.55)) drop-shadow(0 0 60px rgba(255, 185, 80, 0.5)); }
-    }
-    .logo-stack img {
-      display: block; width: 100%; height: auto;
+
+    /* two faces back to back so the text always reads forwards */
+    .face {
+      position: absolute; inset: 0;
       opacity: 0.6;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
+    }
+    .face.back { transform: rotateY(180deg); }
+    .face img { position: absolute; display: block; pointer-events: none; }
+    .face .art { inset: 0; width: 100%; height: 100%; }
+    /* glow is a pre-drawn image (much lighter for phones than a live CSS glow) */
+    .face .glow {
+      left: -12.994%; top: -20.909%;
+      width: 125.988%; height: 141.818%;
       animation: glow 3s ease-in-out infinite alternate;
     }
-    /* back face: pre-turned 180deg so the text reads forwards from behind */
-    .logo-stack img.back {
-      position: absolute; top: 0; left: 0;
-      transform: rotateY(180deg);
-    }
-    @keyframes glow {
-      from { filter: drop-shadow(0 0 8px rgba(255, 225, 150, 0.5)) drop-shadow(0 0 22px rgba(255, 210, 120, 0.5)) drop-shadow(0 0 50px rgba(255, 185, 80, 0.45)); }
-      to   { filter: drop-shadow(0 0 12px rgba(255, 225, 150, 0.65)) drop-shadow(0 0 30px rgba(255, 210, 120, 0.6)) drop-shadow(0 0 70px rgba(255, 185, 80, 0.55)); }
+    @keyframes glow { from { opacity: 0.75; } to { opacity: 1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .logo-stack, .face .glow { animation: none !important; }
     }
     .cv-button, .music-button {
       position: fixed; bottom: 24px; z-index: 2;
@@ -72,13 +76,20 @@
 </head>
 <body>
   <video id="bg" autoplay loop muted playsinline>
+    <source src="background-mobile.mp4" type="video/mp4" media="(max-width: 900px)">
     <source src="background.mp4" type="video/mp4">
   </video>
   <div class="logo">
     <div class="drag" id="drag">
       <div class="logo-stack">
-        <img src="logo-test.png" alt="Eli Purdy-Flacks" draggable="false">
-        <img class="back" src="logo-test.png" alt="" draggable="false">
+        <div class="face front">
+          <img class="glow" src="logo-glow.png" alt="" draggable="false">
+          <img class="art" src="logo-test.png" alt="Eli Purdy-Flacks" draggable="false">
+        </div>
+        <div class="face back">
+          <img class="glow" src="logo-glow.png" alt="" draggable="false">
+          <img class="art" src="logo-test.png" alt="" draggable="false">
+        </div>
       </div>
     </div>
   </div>
@@ -90,7 +101,11 @@
     // drag the logo around
     (function () {
       var el = document.getElementById('drag');
-      var x = 0, y = 0, startX, startY, baseX, baseY;
+      var x = 0, y = 0, startX, startY, baseX, baseY, queued = false;
+      function render() {
+        queued = false;
+        el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+      }
       el.addEventListener('pointerdown', function (e) {
         el.setPointerCapture(e.pointerId);
         el.classList.add('dragging');
@@ -100,7 +115,7 @@
         if (!el.classList.contains('dragging')) return;
         x = baseX + e.clientX - startX;
         y = baseY + e.clientY - startY;
-        el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        if (!queued) { queued = true; requestAnimationFrame(render); }
       });
       function stop() { el.classList.remove('dragging'); }
       el.addEventListener('pointerup', stop);
